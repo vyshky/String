@@ -86,7 +86,7 @@ public:
 	{
 		return str[i];
 	}
-	const char& operator[](int i)const
+	char& operator[](int i)const
 	{
 		return str[i];
 	}
