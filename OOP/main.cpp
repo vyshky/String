@@ -1,4 +1,4 @@
-﻿#include<iostream>
+#include<iostream>
 using namespace std;
 
 #define delimiter "\n---------------------------------------------------------\n"
@@ -130,8 +130,8 @@ bool operator==(const String& left, const String& right)
 
 	for (int i = 0; i < left.get_size(); i++)
 	{
-		if (left.get_str()[i] != right.get_str()[i])return false;
-		if (left.get_str()[left.get_size() - i] != right.get_str()[left.get_size() - i])return false;
+		if (left[i] != right[i])return false;
+		if (left[left.get_size() - i] != right[left.get_size() - i])return false;
 
 	}
 	return true;
@@ -149,7 +149,7 @@ bool operator<(const String& left, const String& right)
 
 bool operator>(const String& left, const String& right)
 {
-	return !(left < right || left == right);
+	return !(left < right || left.get_size() == right.get_size());
 }
 
 
@@ -189,12 +189,12 @@ int main()
 
 	int x = 0;
 	String str1 = "Hello  ";
-	String str2 = "World";
+	String str2 = "Hell0  ";
 
-	/*cout << (str1 == str2) << endl;
+	cout << (str1 == str2) << endl;
 	cout << (str1 != str2) << endl;
 	cout << (str1 > str2) << endl;
-	cout << (str1 < str2) << endl;*/
+	cout << (str1 < str2) << endl;
 
 	cout << delimiter << endl;
 	String str3 = str1 + str2;//Operator + будет выполнять конкатенацию строк(слияние,объединение) строк		
