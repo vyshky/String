@@ -29,26 +29,26 @@ public:
 		cin >> str;
 	}
 	//			Constructors:
-	explicit String(int size = 80)
+	explicit String(int size = 80) :size(size), str(new char [size] {}) //Список инициализации
 	{
-		this->size = size;
-		this->str = new char[size] {};
+		//this->size = size;
+		//this->str = new char[size] {};
 		cout << (size == 80 ? "Default" : "Size") << "Constructor:\t" << this << endl;
 	}
-	String(const char str[])
+	String(const char str[]) :String(strlen(str) + 1)
 	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
+		/*this->size = strlen(str) + 1;
+		this->str = new char[size] {};*/ //Это выполнит первый конструктор
 		for (int i = 0; str[i]; i++)
 			this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
-	String(const String& other)
+	String(const String& other) :String(other.str)
 	{
-		this->size = other.size;
+		/*this->size = other.size;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
-			this->str[i] = other.str[i];
+			this->str[i] = other.str[i];*/
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	//MoveConstructor
@@ -86,7 +86,7 @@ public:
 	{
 		return str[i];
 	}
-	const char& operator[](int i)const
+	char& operator[](int i)const
 	{
 		return str[i];
 	}
@@ -116,7 +116,7 @@ String operator+(const String& left, const String& right)
 		result[i] = left[i];
 
 	for (int i = 0; i < right.get_size(); i++)
-	{		
+	{
 		//result.get_str()[i + left.get_size() - 1] = right.get_str()[i];
 		result[i + left.get_size() - 1] = right[i];
 	}
@@ -130,8 +130,8 @@ bool operator==(const String& left, const String& right)
 
 	for (int i = 0; i < left.get_size(); i++)
 	{
-		if (left.get_str()[i] != right.get_str()[i])return false;
-		if (left.get_str()[left.get_size() - i] != right.get_str()[left.get_size() - i])return false;
+		if (left[i] != right[i])return false;
+		if (left[left.get_size() - i] != right[left.get_size() - i])return false;
 
 	}
 	return true;
@@ -149,12 +149,14 @@ bool operator<(const String& left, const String& right)
 
 bool operator>(const String& left, const String& right)
 {
-	return !(left < right || left == right);
+	return !(left < right || left.get_size() == right.get_size());
 }
 
 
 //#define CONSTRUCTORS_CHECK
 //#define ASSIGNMENT_CHECK
+#define OPERATOR_PLUS_CHEK
+//#define CONSTRUCTORS_CALLING
 
 int main()
 {
@@ -187,19 +189,24 @@ int main()
 	cout << a << endl;
 #endif // ASSIGNMENT_CHECK
 
+#ifdef OPERATOR_PLUS_CHEK
 	int x = 0;
-	String str1 = "Hello  ";
+	String str1 = "Hello ";
 	String str2 = "World";
+	cout << delimiter << endl;
+	String str3 = str1 + str2;//Operator + будет выполнять конкатенацию строк(слияние,объединение) строк		
+	cout << delimiter << endl;
+	cout << str3 << endl;
+	String str4 = str3;
+	cout << str4 << endl;
+#endif // OPERATOR_PLUS_CHEK
+
 
 	/*cout << (str1 == str2) << endl;
 	cout << (str1 != str2) << endl;
 	cout << (str1 > str2) << endl;
 	cout << (str1 < str2) << endl;*/
 
-	cout << delimiter << endl;
-	String str3 = str1 + str2;//Operator + будет выполнять конкатенацию строк(слияние,объединение) строк		
-	cout << delimiter << endl;
-	cout << str3 << endl;	
 	//cout << delimiter << endl;
 	//str1 += str2;
 	//cout << delimiter << endl;
@@ -207,5 +214,32 @@ int main()
 	//String str3 = str1;//Copy constructor
 	//String str4;
 	//str4 = str2;	//Operator=
+
+#ifdef CONSTRUCTORS_CALLING
+	String str; //default constructor
+	str.print();
+	String str1(5);
+	str1.print();
+	String str2 = "Hello"; //single-argument constructor
+	str2.print();
+	String str3("Hello"); //single-argument constructor
+
+	String str4();  //Это НЕ вызывает конструктор по умолчанию,
+	//здесь объявляется функция str4, которая ничего не принимает ,
+	// и возвращает значение типа String.
+
+
+	String str5;//Неявный вызов конструктора по умолчанию
+	str5.print();
+
+	String str6{}; //Это явный вызов конструктора по умолчанию
+	str6.print();
+
+	String str7{ "Hello" };
+	String("Привет") == str3; //Явный вызов конструктора для создания временного безимяного объекта
+
+#endif // CONSTRUCTORS_CALLING
+
+
 	return 0;
 }
